@@ -1,0 +1,28 @@
+{
+  "name": "smartql-sign",
+  "version": "1.0.0",
+  "description": "A universal javascript tool for pushing smartql mutations to the blockchain.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/relocke/smartql-sign.git"
+  },
+  "keywords": [
+    "smartql",
+    "digital",
+    "signature",
+    "ecc",
+    "eosio",
+    "based",
+    "blockchains"
+  ],
+  "author": "pur3miish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/relocke/smartql-sign/issues"
+  },
+  "homepage": "https://github.com/relocke/smartql-sign#readme"
+}
