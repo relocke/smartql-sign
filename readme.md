@@ -1,7 +1,7 @@
 ![img](https://raw.githubusercontent.com/relocke/smartql-sign/master/logo.svg)
 
 
-A universal JavaScript tool for pushing SmartQL mutations to the blockchains.
+A universal JavaScript tool for pushing SmartQL mutations to the blockchain.
 
 # Support
 
