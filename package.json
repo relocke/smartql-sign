@@ -24,5 +24,22 @@
   "bugs": {
     "url": "https://github.com/relocke/smartql-sign/issues"
   },
-  "homepage": "https://github.com/relocke/smartql-sign#readme"
+  "homepage": "https://github.com/relocke/smartql-sign#readme",
+  "dependencies": {
+    "eos-ecc": "^2.0.1",
+    "isomorphic-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "coverage-node": "^5.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-env": "^22.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-compat": "^3.13.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsdoc": "^36.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jsdoc-md": "^11.0.2",
+    "prettier": "^2.4.1"
+  }
 }
