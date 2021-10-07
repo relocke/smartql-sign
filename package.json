@@ -1,6 +1,6 @@
 {
   "name": "smartql-sign",
-  "version": "1.0.0-beta-0",
+  "version": "1.0.0-beta-1",
   "description": "A universal javascript tool for pushing smartql mutations to the blockchain.",
   "main": "index.js",
   "scripts": {
@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/relocke/smartql-sign#readme",
   "dependencies": {
-    "eos-ecc": "^2.0.1",
+    "eos-ecc": "^2.0.2",
     "isomorphic-fetch": "^3.0.0"
   },
   "devDependencies": {
