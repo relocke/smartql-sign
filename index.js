@@ -17,30 +17,38 @@ const EOS = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
 
 /**
  * @kind namespace
- * @name TxnReceipt
- * @param {string} transaction_id id to refrence the transaction.
- * @param {string} block_num What block the transaction is located in.
+ * @name TranctionReceipt
+ * @param {string} transaction_id ID to refrence the transaction.
+ * @param {number} block_num The block the transaction is located in.
  * @param {string} block_time Transaction time (GMT).
  * @param {string} producer_block_id The producers ID.
  * @param {ResoruceCost} resource_cost Network cost of the transaction.
- * @param {number} elapsed Elapsed.
- * @param {number} net_usage Network usage
+ * @param {number} elapsed Elapsed time in µs used.
+ * @param {number} net_usage Network usage.
  * @param {boolean} scheduled Scheduled.
- * @param {string} action_traces JSON representation of the actions performed.
+ * @param {string} action_traces JSON representation of the executed transaction.
  */
 
 /**
- * Push a SmartQL mutation to the blockchain.
+ * Push a transaction to the Blockchain.
  * @kind function
- * @name push_mutation
+ * @name push_transaction
  * @param {object} arg Argument
  * @param {string} arg.chain_id Hash representing the ID of the chain.
- * @param {string} arg.transaction_header Meta data about the transaction.
+ * @param {string} arg.transaction_header Meta data about the transaction (TaPoS, bandwidth allocation).
  * @param {string} arg.transaction_body The serialized transaction data.
- * @param {Array<string>} private_keys List of wif private keys to transaction.
- * @returns {TxnReceipt} transaction receipt.
+ * @param {Array<string>} private_keys List of wif private keys to sign the transaction with.
+ * @returns {TranctionReceipt} transaction receipt.
+ * @example <caption>Ways to `require`</caption>
+ * ```js
+ * const { push_transaction } = require('smartql-sign')
+ * ```
+ * @example <caption>Ways to `import`</caption>
+ * ```js
+ * import { push_transaction } from 'smartql-sign'
+ * ```
  */
-async function push_mutation(
+async function push_transaction(
   { chain_id, transaction_header, transaction_body },
   private_keys
 ) {
@@ -79,7 +87,7 @@ async function push_mutation(
         packed_trx: transaction_header + transaction_body
       },
       query: /* GraphQL */ `
-        mutation ($packed_trx: String, $signatures: [String]) {
+        mutation ($packed_trx: String!, $signatures: [String!]) {
           push_transaction(packed_trx: $packed_trx, signatures: $signatures) {
             transaction_id
             block_num
@@ -98,4 +106,72 @@ async function push_mutation(
   return res.json()
 }
 
-module.exports = push_mutation
+/**
+ * Pushes a GraphQL mutation to the blockchain.
+ * @name push_mutation
+ * @kind function
+ * @param {object} arg Argument.
+ * @param {string} arg.query GraphQL query string.
+ * @param {object} arg.variables GraphQL variabes.
+ * @param {Array<string>} arg.private_keys List of wif private keys to sign the transaction with.
+ * @param {string} [blockchain] Specifiy what EOSIO chain you want to connet to.
+ * @returns {TranctionReceipt} Transaction receipt.
+ * @example <caption>Ways to `require`</caption>
+ * ```js
+ * const { push_mutation } = require('smartql-sign')
+ * ```
+ * @example <caption>Ways to `import`</caption>
+ * ```js
+ * import { push_mutation } from 'smartql-sign'
+ * ```
+ * @example <caption>Push a mutation</caption>
+ * ```js
+ * push_mutation({
+ *   query: `
+ *     mutation {
+ *       eosio_token(
+ *         actions: {
+ *           transfer: {
+ *             to: "pur3miish111"
+ *             from: "relocke"
+ *             quantity: "1.0000 EOS"
+ *             memo: "sent with SmartQL"
+ *             authorization: { actor: "relocke" }
+ *           }
+ *         }
+ *       ) {
+ *         chain_id
+ *         transaction_header
+ *         transaction_body
+ *       }
+ *     }
+ *   `,
+ *   private_keys: ['5…']
+ * }).then(console.log)
+ * ```
+ * > The logged output was the `TranctionReceipt` object.
+ */
+async function push_mutation(
+  { query, variables, private_keys },
+  blockchain = 'jungle'
+) {
+  const url = `https://${blockchain}.relocke.io`
+
+  const res = await fetch(url, {
+    method: 'post',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      variables,
+      query
+    })
+  })
+
+  const { data, errors } = await res.json()
+  if (errors) throw errors
+
+  return push_transaction(...Object.values(data), private_keys)
+}
+
+module.exports = { push_transaction, push_mutation }
