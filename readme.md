@@ -1,6 +1,7 @@
 ![img](https://raw.githubusercontent.com/relocke/smartql-sign/master/logo.svg)
 
-A universal JavaScript tool for pushing SmartQL mutations to the blockchain.
+A universal Javascript tool for pushing SmartQL (_GraphQL_) mutations to EOSIO based blockchains.
+
 
 # Support
 
